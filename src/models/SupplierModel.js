@@ -20,11 +20,22 @@ const findOneById = async (id) => {
     }
 }
 
+const getAll = async () => {
+    try {
+        const cursor = await GET_DB().collection(SUPPLIER_COLLECTION_NAME).find()
+        const result = await cursor.toArray();
+        return result;
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 
 
 export const SupplierModel = {
 
     save,
-    findOneById
+    findOneById,
+    getAll
 
 }

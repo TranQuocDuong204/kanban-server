@@ -1,12 +1,13 @@
 import { StatusCodes } from "http-status-codes"
 import { SupplierModel } from "../models/SupplierModel.js";
+
 const getSupplier = async (req, res) => {
-    const body = req.body
+
     try {
-
-
+        const result = await SupplierModel.getAll();
+        return res.status(StatusCodes.OK).json({ message: "Get all data from supplier", result })
     } catch (error) {
-        console.log(error);
+        return res.status(StatusCodes.NOT_FOUND).json({ message: "Error when get data", error })
 
     }
 }
