@@ -26,6 +26,7 @@ const createdNew = async (req, res) => {
             isTasking,
             contact,
             slug,
+            isDeleted: false,
             createdAt: Date.now(),
             updatedAt: Date.now()
         }
@@ -45,7 +46,88 @@ const createdNew = async (req, res) => {
     }
 }
 
+const update = async (req, res) => {
+    const { name, product, categories, price, photoUrl, isTasking, slug, contact } = req.body;
+    const { id } = req.query;
+
+    if (!id) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: "Missing supplier ID" });
+    }
+
+    try {
+        const updateData = {
+            name,
+            product,
+            categories,
+            price,
+            photoUrl,
+            isTasking,
+            contact,
+            slug,
+            updatedAt: Date.now()
+        };
+
+        const resultUp = await SupplierModel.update(id, updateData);
+        console.log(resultUp);
+
+        return res.status(StatusCodes.OK).json({
+            message: "Supplier updated",
+            data: [],
+        });
+
+    } catch (error) {
+        console.error("Error in updating supplier:", error);
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "An error occurred" });
+    }
+};
+
+const removeSupplier = async (req, res) => {
+    const { id } = req.query;
+
+    if (!id) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: "Missing supplier ID" });
+    }
+
+    try {
+        const resultRemove = await SupplierModel.deleteSupplier(id);
+
+        return res.status(StatusCodes.OK).json({
+            message: "Supplier removed",
+            data: [],
+        });
+
+    } catch (error) {
+        console.error("Error in updating supplier:", error);
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "An error occurred" });
+    }
+};
+
+const removeSupplierSoft = async (req, res) => {
+    const { isDeleted } = req.body
+
+    const { id } = req.query;
+    if (!id) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: "Missing supplier ID" });
+    }
+
+    try {
+        const resultRemoveSoft = await SupplierModel.removeSupplierSoft(id, isDeleted);
+
+        return res.status(StatusCodes.OK).json({
+            message: "Supplier removed soft",
+            data: [],
+        });
+
+    } catch (error) {
+        console.error("Error in updating supplier:", error);
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "An error occurred" });
+    }
+};
+
 export const SupplierController = {
     createdNew,
-    getSupplier
+    getSupplier,
+    update,
+    removeSupplier,
+    removeSupplierSoft
 }

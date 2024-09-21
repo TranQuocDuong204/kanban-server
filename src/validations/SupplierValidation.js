@@ -10,6 +10,7 @@ const createdNew = async (req, res, next) => {
         isTasking: Joi.number(),
         contact: Joi.number(),
         photoUrl: Joi.string(),
+        isDeleted: Joi.boolean().default(false),
         createdAt: Joi.string().default(new Date()),
         updatedAt: Joi.string().default(new Date())
     })

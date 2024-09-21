@@ -22,7 +22,7 @@ const findOneById = async (id) => {
 
 const getAll = async () => {
     try {
-        const cursor = await GET_DB().collection(SUPPLIER_COLLECTION_NAME).find()
+        const cursor = await GET_DB().collection(SUPPLIER_COLLECTION_NAME).find({ isDeleted: false })
         const result = await cursor.toArray();
         return result;
     } catch (error) {
@@ -30,12 +30,62 @@ const getAll = async () => {
     }
 }
 
+const update = async (id, data) => {
+    try {
+        const result = await GET_DB()
+            .collection(SUPPLIER_COLLECTION_NAME)
+            .findOneAndUpdate(
+                { _id: new ObjectId(id) },
+                { $set: data }, 
+            );
+
+        return result; 
+    } catch (error) {
+        console.error("Error updating supplier:", error);
+        throw error; 
+    }
+};
+
+const deleteSupplier = async (id) => {
+    try {
+        const result = await GET_DB()
+            .collection(SUPPLIER_COLLECTION_NAME)
+            .findOneAndDelete(
+                { _id: new ObjectId(id) },
+            );
+
+        return result;
+    } catch (error) {
+        console.error("Error updating supplier:", error);
+        throw error; 
+    }
+}
+
+
+const removeSupplierSoft = async (id, data) => {
+    try {
+        const result = await GET_DB()
+            .collection(SUPPLIER_COLLECTION_NAME)
+            .findOneAndUpdate(
+                { _id: new ObjectId(id) }, 
+                { $set: { "isDeleted": data } }, 
+            );
+
+        return result; 
+    } catch (error) {
+        console.error("Error updating supplier:", error);
+        throw error;
+    }
+};
+
 
 
 export const SupplierModel = {
 
     save,
     findOneById,
-    getAll
-
+    getAll,
+    update,
+    deleteSupplier,
+    removeSupplierSoft
 }
