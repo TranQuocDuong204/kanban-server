@@ -20,15 +20,30 @@ const findOneById = async (id) => {
     }
 }
 
-const getAll = async () => {
+const getAll = async (skip, pageSize) => {
     try {
         const cursor = await GET_DB().collection(SUPPLIER_COLLECTION_NAME).find({ isDeleted: false })
+        .skip(skip)
+        .limit(pageSize)
         const result = await cursor.toArray();
         return result;
     } catch (error) {
         throw new Error(error)
     }
 }
+
+const totalPage = async () => {
+    try {
+        const cursor = await GET_DB().collection(SUPPLIER_COLLECTION_NAME).countDocuments()
+     
+        return cursor;
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+
+
 
 const update = async (id, data) => {
     try {
@@ -87,5 +102,6 @@ export const SupplierModel = {
     getAll,
     update,
     deleteSupplier,
-    removeSupplierSoft
+    removeSupplierSoft,
+    totalPage
 }

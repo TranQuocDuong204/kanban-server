@@ -40,6 +40,7 @@ const ValidateLoginWithGoogle = async (req, res, next) => {
     const Login = Joi.object({
         name: Joi.string().required().min(3).max(50).trim(),
         email: Joi.string().required().min(3).max(50).email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'vn'] } }),
+        photoUrl: Joi.string()
     })
 
     try {

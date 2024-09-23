@@ -2,10 +2,14 @@ import { StatusCodes } from "http-status-codes"
 import { SupplierModel } from "../models/SupplierModel.js";
 
 const getSupplier = async (req, res) => {
+    const { page, pageSize } = req.query
 
     try {
-        const result = await SupplierModel.getAll();
-        return res.status(StatusCodes.OK).json({ message: "Get all data from supplier", result })
+        const skip = (page - 1) * pageSize;
+        const result = await SupplierModel.getAll(skip, parseInt(pageSize));
+        const total = await SupplierModel.totalPage()
+        
+        return res.status(StatusCodes.OK).json({ message: "Get all data from supplier", result, total })
     } catch (error) {
         return res.status(StatusCodes.NOT_FOUND).json({ message: "Error when get data", error })
 
@@ -14,17 +18,19 @@ const getSupplier = async (req, res) => {
 
 
 const createdNew = async (req, res) => {
-    const { name, product, categories, price, photoUrl,
-        isTasking, slug, contact } = req.body
+    const { name, email, product, categories, price, photoUrl,
+        isTasking, slug, contact, active } = req.body
     try {
         const createSupplier = {
             name,
+            email,
             product,
             categories,
             price,
             photoUrl,
             isTasking,
             contact,
+            active,
             slug,
             isDeleted: false,
             createdAt: Date.now(),
@@ -47,7 +53,7 @@ const createdNew = async (req, res) => {
 }
 
 const update = async (req, res) => {
-    const { name, product, categories, price, photoUrl, isTasking, slug, contact } = req.body;
+    const { name, email, product, categories, price, photoUrl, isTasking, slug, contact, active } = req.body;
     const { id } = req.query;
 
     if (!id) {
@@ -57,12 +63,14 @@ const update = async (req, res) => {
     try {
         const updateData = {
             name,
+            email,
             product,
             categories,
             price,
             photoUrl,
             isTasking,
             contact,
+            active,
             slug,
             updatedAt: Date.now()
         };

@@ -77,7 +77,9 @@ const login = async (req, res) => {
 }
 
 const loginWithGoogle = async (req, res) => {
-    const { name, email } = req.body
+    const { name, email, photoUrl } = req.body
+    console.log(req.body);
+    
     if (!name || !email) return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Name or Email not found, Please enter!!" })
     try {
         const user = await AuthModel.findOne(email)
@@ -87,6 +89,7 @@ const loginWithGoogle = async (req, res) => {
             return res.status(StatusCodes.OK).json({
                 message: "Login successfully", data: {
                     ...user,
+                    photoUrl,
                     token: await getAccessToken(
                         _id,
                         email,
@@ -102,6 +105,7 @@ const loginWithGoogle = async (req, res) => {
         const userData = {
             name,
             email,
+            photoUrl,
             password: hash,
             createdAt: Date.now(),
             updatedAt: Date.now()
