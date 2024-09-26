@@ -14,4 +14,8 @@ Router.route('/remove')
     .delete(SupplierController.removeSupplier)
 Router.route('/remove-soft')
     .put(SupplierController.removeSupplierSoft)
+Router.route('/get-form')
+    .get(SupplierController.getForm)
+Router.route('/get-export-data')
+    .post(SupplierController.getExportData)
 export const SupplierRoute = Router

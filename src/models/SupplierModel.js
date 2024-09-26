@@ -93,6 +93,17 @@ const removeSupplierSoft = async (id, data) => {
     }
 };
 
+const find = async (filter) => {
+    try {
+        const cursor = await GET_DB().collection(SUPPLIER_COLLECTION_NAME).find( filter )
+
+        const result = await cursor.toArray();
+        return result;
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 
 
 export const SupplierModel = {
@@ -103,5 +114,6 @@ export const SupplierModel = {
     update,
     deleteSupplier,
     removeSupplierSoft,
-    totalPage
+    totalPage, 
+    find
 }
