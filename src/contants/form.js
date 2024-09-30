@@ -1,3 +1,5 @@
+
+
 export const formItem = [
     {
         key: "name",
@@ -135,4 +137,29 @@ export const formCols = [
         type: "number",
         placeholder: "Enter supplier category contact",
     }
+]
+
+export const productsForm = [
+    {
+        key: "title",
+        value: "title",
+        label: "Products",
+        placeholder: "Enter product name",
+        type: "default",
+        required: true,
+        message: "Enter product name",
+        default_value: "",
+        displayLength: 400
+    },
+    {
+        key: "price",
+        value: "title",
+        label: "Products",
+        placeholder: "Enter product name",
+        type: "default",
+        required: true,
+        message: "Enter product name",
+        default_value: "",
+        displayLength: 400
+    },
 ]

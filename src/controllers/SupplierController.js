@@ -12,7 +12,6 @@ const getSupplier = async (req, res) => {
         return res.status(StatusCodes.OK).json({ message: "Get all data from supplier", result, total })
     } catch (error) {
         return res.status(StatusCodes.NOT_FOUND).json({ message: "Error when get data", error })
-
     }
 }
 
@@ -36,7 +35,9 @@ const createdNew = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error);
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: error
+        })
 
     }
 }
@@ -83,8 +84,7 @@ const removeSupplier = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error in updating supplier:", error);
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "An error occurred" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "An error occurred", error });
     }
 };
 
@@ -105,8 +105,7 @@ const removeSupplierSoft = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error in updating supplier:", error);
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "An error occurred" });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "An error occurred", error });
     }
 };
 
@@ -126,7 +125,6 @@ const getForm = async (req, res) => {
             form
         })
     } catch (error) {
-
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
 }
@@ -147,26 +145,24 @@ const getExportData = async (req, res) => {
             $gte: startDate.getTime(),
             $lte: endDate.getTime()
         };
-        console.log("Filter:", filter);
     }
-    console.log(body);
-    
+
     try {
         const items = await SupplierModel.find(filter)
-        const data= [];
-		if (items.length > 0) {
-			items.forEach((item) => {
-				const value = {};
+        const data = [];
+        if (items.length > 0) {
+            items.forEach((item) => {
+                const value = {};
 
-				body.forEach((key) => {
-					value[`${key}`] = `${item[`${key}`] ?? ''}`;
-				});
+                body.forEach((key) => {
+                    value[`${key}`] = `${item[`${key}`] ?? ''}`;
+                });
 
-				data.push(value);
-			});
-		}
+                data.push(value);
+            });
+        }
         return res.status(StatusCodes.OK).json({ message: "Export data excel", data })
-        
+
 
     } catch (error) {
         return res.status(StatusCodes.NOT_FOUND).json({ message: "Error when get data", error })
