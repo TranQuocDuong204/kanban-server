@@ -9,6 +9,6 @@ Router.get('/', (req, res) => {
 })
 
 Router.use('/auth', AuthRoute)
-Router.use('/stored', ProductRoute)
+Router.use('/product', ProductRoute)
 Router.use('/supplier', SupplierRoute)
 export const APIS_v1 = Router

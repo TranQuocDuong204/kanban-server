@@ -3,13 +3,9 @@ import { StatusCodes } from 'http-status-codes'
 const createdNew = async (req, res, next) => {
     const createNew = Joi.object({
         title: Joi.string().required().min(3),
+        parentsId: Joi.string().empty(["", null]),
         slug: Joi.string(),
-        supplier: Joi.string().required(),
-        categories: Joi.array().items(Joi.string()),
-        quantity: Joi.number().default(0),
-        price: Joi.number(),
-        unit: Joi.string().default("Cái"),
-        expiryDate: Joi.date(),
+        description: Joi.string(),
         createdAt: Joi.date().default(new Date()),
         updatedAt: Joi.date().default(new Date())
     })
@@ -27,7 +23,7 @@ const createdNew = async (req, res, next) => {
 
 
 
-export const ProductValidation = {
+export const CategoriesValidation = {
     createdNew,
 
 }
